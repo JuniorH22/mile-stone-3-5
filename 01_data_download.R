@@ -1,0 +1,10 @@
+source("scripts/00_setup.R")
+source("scripts/_find_accident.R")
+csv <- Sys.getenv("RAW_CSV", unset = "")
+if (!nzchar(csv)) csv <- find_accident()
+df <- readr::read_csv(csv, show_col_types = FALSE) |>
+  janitor::clean_names()
+readr::write_csv(df, "data/processed/raw_loaded.csv")
+cat("Rows:", nrow(df), " Cols:", ncol(df), "\n")
+print(skimr::skim(df))
+message("Wrote data/processed/raw_loaded.csv")
